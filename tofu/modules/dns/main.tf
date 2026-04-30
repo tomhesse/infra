@@ -52,3 +52,17 @@ resource "scaleway_domain_record" "shrimphouse_xyz_aaaa_vpn" {
   data     = "2a00:c380:e004:19b0::"
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "shrimphouse_xyz_caa_root_issue" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CAA"
+  data     = "0 issue \"letsencrypt.org\""
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_caa_root_issuewild" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CAA"
+  data     = "0 issuewild \"letsencrypt.org\""
+  ttl      = 3600
+}
