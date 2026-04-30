@@ -21,24 +21,18 @@ tofu/
 
 ## Prerequisites
 
-- [OpenTofu](https://opentofu.org/) >= 1.6
+- [Nix](https://nixos.org/) with flakes enabled
 - A Scaleway account with API keys
 
-## Authentication
+## Getting started
 
-The Scaleway **provider** reads credentials from environment variables:
-
-```sh
-export SCW_ACCESS_KEY="your-access-key"
-export SCW_SECRET_KEY="your-secret-key"
-```
-
-The S3 **backend** uses the AWS SDK and needs its own variables (can be the same Scaleway API key):
+Enter the dev shell to get all required tools (OpenTofu, etc.) and set up credentials:
 
 ```sh
-export AWS_ACCESS_KEY_ID="your-access-key"
-export AWS_SECRET_ACCESS_KEY="your-secret-key"
+nix develop
 ```
+
+This will prompt for your Scaleway Access Key and Secret Key, and export them for both the Scaleway provider and the S3 backend.
 
 ## State
 
