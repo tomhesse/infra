@@ -66,3 +66,82 @@ resource "scaleway_domain_record" "shrimphouse_xyz_caa_root_issuewild" {
   data     = "0 issuewild \"letsencrypt.org\""
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "shrimphouse_xyz_txt_root_spf" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "TXT"
+  data     = "v=spf1 include:mailbox.org ~all"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_txt_mailbox_verification" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "TXT"
+  name     = "84f18801657f421ae1e16d6e239f3f051a002364"
+  data     = "09e32be0c12d7b431e815b9d1d04045154ab71e6"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_mx_root_1" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "MX"
+  data     = "mxext1.mailbox.org."
+  priority = 10
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_mx_root_2" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "MX"
+  data     = "mxext2.mailbox.org."
+  priority = 10
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_mx_root_3" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "MX"
+  data     = "mxext3.mailbox.org."
+  priority = 20
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_cname_dkim_mbo0001" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CNAME"
+  name     = "mbo0001._domainkey"
+  data     = "mbo0001._domainkey.mailbox.org."
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_cname_dkim_mbo0002" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CNAME"
+  name     = "mbo0002._domainkey"
+  data     = "mbo0002._domainkey.mailbox.org."
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_cname_dkim_mbo0003" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CNAME"
+  name     = "mbo0003._domainkey"
+  data     = "mbo0003._domainkey.mailbox.org."
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_cname_dkim_mbo0004" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CNAME"
+  name     = "mbo0004._domainkey"
+  data     = "mbo0004._domainkey.mailbox.org."
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_txt_dmarc" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "TXT"
+  name     = "_dmarc"
+  data     = "v=DMARC1;p=reject;rua=mailto:postmaster@shrimphouse.xyz"
+  ttl      = 3600
+}
