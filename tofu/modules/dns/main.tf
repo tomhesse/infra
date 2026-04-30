@@ -36,3 +36,19 @@ resource "scaleway_domain_record" "shrimphouse_xyz_ns_root_1" {
   data     = "ns1.dom.scw.cloud."
   ttl      = 86400
 }
+
+resource "scaleway_domain_record" "shrimphouse_xyz_a_vpn" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "A"
+  name     = "vpn"
+  data     = "31.172.13.60"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_aaaa_vpn" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "AAAA"
+  name     = "vpn"
+  data     = "2a00:c380:e004:19b0::"
+  ttl      = 3600
+}
