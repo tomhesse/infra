@@ -23,7 +23,7 @@ resource "scaleway_iam_policy" "infra_opentofu" {
 
   rule {
     project_ids          = ["608deeb4-b226-44f7-bb38-4354d8029c7e"]
-    permission_set_names = ["DomainsDNSFullAccess", "ObjectStorageFullAccess"]
+    permission_set_names = ["DomainsDNSFullAccess", "ObjectStorageFullAccess", "TransactionalEmailFullAccess"]
   }
 
   rule {
