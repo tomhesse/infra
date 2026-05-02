@@ -145,3 +145,38 @@ resource "scaleway_domain_record" "shrimphouse_xyz_txt_dmarc" {
   data     = "v=DMARC1;p=reject;rua=mailto:postmaster@shrimphouse.xyz"
   ttl      = 3600
 }
+
+# Transactional Email (mail.shrimphouse.xyz)
+
+resource "scaleway_domain_record" "shrimphouse_xyz_txt_mail_spf" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "TXT"
+  name     = "mail"
+  data     = var.tem.spf_value
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_txt_mail_dkim" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "TXT"
+  name     = var.tem.dkim_name
+  data     = var.tem.dkim_config
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_mx_mail" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "MX"
+  name     = "mail"
+  data     = split(" ", var.tem.mx_config)[1]
+  priority = split(" ", var.tem.mx_config)[0]
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "shrimphouse_xyz_txt_mail_dmarc" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "TXT"
+  name     = var.tem.dmarc_name
+  data     = var.tem.dmarc_config
+  ttl      = 3600
+}
