@@ -25,6 +25,11 @@ resource "scaleway_iam_policy" "infra_opentofu" {
     project_ids          = ["608deeb4-b226-44f7-bb38-4354d8029c7e"]
     permission_set_names = ["DomainsDNSFullAccess", "ObjectStorageFullAccess"]
   }
+
+  rule {
+    organization_id      = "608deeb4-b226-44f7-bb38-4354d8029c7e"
+    permission_set_names = ["IAMManager"]
+  }
 }
 
 resource "scaleway_iam_api_key" "infra_opentofu" {
