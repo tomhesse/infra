@@ -6,6 +6,21 @@ module "storage" {
 module "dns" {
   source        = "./modules/dns"
   owner_contact = var.owner_contact
+
+  tem = {
+    spf_value    = module.tem.spf_value
+    dkim_config  = module.tem.dkim_config
+    dkim_name    = module.tem.dkim_name
+    dmarc_config = module.tem.dmarc_config
+    dmarc_name   = module.tem.dmarc_name
+    mx_config    = module.tem.mx_config
+  }
+}
+
+module "tem" {
+  source     = "./modules/tem"
+  domain     = "mail.shrimphouse.xyz"
+  project_id = var.project_id
 }
 
 module "iam_acme_mimir" {
