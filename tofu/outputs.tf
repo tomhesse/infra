@@ -21,3 +21,18 @@ output "tem_mimir_secret_key" {
   value       = module.iam_tem_mimir.secret_key
   sensitive   = true
 }
+
+output "tem_smtp_host" {
+  description = "SMTP host for sending emails"
+  value       = module.tem.smtp_host
+}
+
+output "tem_smtps_port" {
+  description = "SMTPS port for sending emails"
+  value       = module.tem.smtps_port
+}
+
+output "tem_smtps_auth_user" {
+  description = "SMTPS authentication user"
+  value       = module.tem.smtps_auth_user
+}
