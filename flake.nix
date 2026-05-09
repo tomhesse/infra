@@ -18,11 +18,13 @@
         shellHook = ''
           read -rp "Scaleway Access Key: " SCW_ACCESS_KEY
           read -rp "Scaleway Secret Key: " SCW_SECRET_KEY
+          read -rp "Hetzner Cloud API Token: " HCLOUD_TOKEN
 
           export SCW_ACCESS_KEY
           export SCW_SECRET_KEY
           export AWS_ACCESS_KEY_ID="$SCW_ACCESS_KEY"
           export AWS_SECRET_ACCESS_KEY="$SCW_SECRET_KEY"
+          export HCLOUD_TOKEN
         '';
       };
     };

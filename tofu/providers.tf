@@ -6,6 +6,10 @@ terraform {
       source  = "scaleway/scaleway"
       version = "~> 2.0"
     }
+    hcloud = {
+      source  = "hetznercloud/hcloud"
+      version = "~> 1.62"
+    }
   }
 }
 
@@ -14,3 +18,5 @@ provider "scaleway" {
   project_id      = var.project_id
   region          = var.region
 }
+
+provider "hcloud" {}
