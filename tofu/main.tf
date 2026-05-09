@@ -31,6 +31,11 @@ module "iam_acme_mimir" {
   expires_at           = "2027-05-02T00:00:00Z"
 }
 
+resource "hcloud_ssh_key" "thesse" {
+  name       = "thesse"
+  public_key = file("${path.module}/keys/thesse.pub")
+}
+
 module "iam_tem_mimir" {
   source               = "./modules/iam"
   name                 = "tem-mimir"
