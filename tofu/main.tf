@@ -36,6 +36,16 @@ resource "hcloud_ssh_key" "thesse" {
   public_key = file("${path.module}/keys/thesse.pub")
 }
 
+module "storagebox" {
+  source           = "./modules/storagebox"
+  name             = "backups"
+  storage_box_type = "bx11"
+  location         = "fsn1"
+  password         = var.storagebox_password
+  ssh_keys         = [hcloud_ssh_key.thesse.public_key]
+  subaccounts      = var.storagebox_subaccounts
+}
+
 module "iam_tem_mimir" {
   source               = "./modules/iam"
   name                 = "tem-mimir"

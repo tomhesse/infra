@@ -36,3 +36,19 @@ output "tem_smtps_auth_user" {
   description = "SMTPS authentication user"
   value       = module.tem.smtps_auth_user
 }
+
+output "storagebox_server" {
+  description = "FQDN of the Storage Box"
+  value       = module.storagebox.server
+}
+
+output "storagebox_username" {
+  description = "Primary username of the Storage Box"
+  value       = module.storagebox.username
+}
+
+output "storagebox_subaccounts" {
+  description = "Map of subaccount details, keyed by name"
+  value       = module.storagebox.subaccounts
+  sensitive   = true
+}
