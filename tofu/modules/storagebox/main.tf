@@ -16,6 +16,13 @@ resource "hcloud_storage_box" "this" {
     zfs_enabled          = var.access_settings.zfs_enabled
   }
 
+  snapshot_plan = {
+    max_snapshots = 10
+    hour          = 6
+    minute        = 0
+    day_of_week   = 1
+  }
+
   lifecycle {
     ignore_changes  = [ssh_keys]
     prevent_destroy = true
