@@ -22,6 +22,17 @@ output "tem_mimir_secret_key" {
   sensitive   = true
 }
 
+output "tem_prowlarr_access_key" {
+  description = "Access key for the tem-prowlarr IAM API key"
+  value       = module.iam_tem_prowlarr.access_key
+  sensitive   = true
+}
+
+output "tem_prowlarr_secret_key" {
+  description = "Secret key for the tem-prowlarr IAM API key"
+  value       = module.iam_tem_prowlarr.secret_key
+  sensitive   = true
+}
 output "tem_smtp_host" {
   description = "SMTP host for sending emails"
   value       = module.tem.smtp_host
