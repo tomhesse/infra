@@ -70,6 +70,14 @@ module "iam_tem_radarr" {
   expires_at           = "2027-05-02T00:00:00Z"
 }
 
+module "iam_tem_sabnzbd" {
+  source               = "./modules/iam"
+  name                 = "tem-sabnzbd"
+  project_ids          = [var.project_id]
+  permission_set_names = ["TransactionalEmailEmailFullAccess"]
+  expires_at           = "2027-05-02T00:00:00Z"
+}
+
 module "iam_tem_sonarr" {
   source               = "./modules/iam"
   name                 = "tem-sonarr"
