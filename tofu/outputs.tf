@@ -10,6 +10,18 @@ output "acme_mimir_secret_key" {
   sensitive   = true
 }
 
+output "tem_alertmanager_access_key" {
+  description = "Access key for the tem-alertmanager IAM API key"
+  value       = module.iam_tem_alertmanager.access_key
+  sensitive   = true
+}
+
+output "tem_alertmanager_secret_key" {
+  description = "Secret key for the tem-alertmanager IAM API key"
+  value       = module.iam_tem_alertmanager.secret_key
+  sensitive   = true
+}
+
 output "tem_mimir_access_key" {
   description = "Access key for the tem-mimir IAM API key"
   value       = module.iam_tem_mimir.access_key
