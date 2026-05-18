@@ -59,14 +59,14 @@ output "tem_radarr_secret_key" {
 }
 
 output "tem_sabnzbd_access_key" {
-  description = "Access key for the tem-sonarr IAM API key"
-  value       = module.iam_tem_sonarr.access_key
+  description = "Access key for the tem-sabnzbd IAM API key"
+  value       = module.iam_tem_sabnzbd.access_key
   sensitive   = true
 }
 
 output "tem_sabnzbd_secret_key" {
-  description = "Secret key for the tem-sonarr IAM API key"
-  value       = module.iam_tem_sonarr.secret_key
+  description = "Secret key for the tem-sabnzbd IAM API key"
+  value       = module.iam_tem_sabnzbd.secret_key
   sensitive   = true
 }
 
