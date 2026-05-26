@@ -4,8 +4,7 @@ module "storage" {
 }
 
 module "dns" {
-  source        = "./modules/dns"
-  owner_contact = var.owner_contact
+  source = "./modules/dns"
 
   tem = {
     spf_value    = module.tem.spf_value

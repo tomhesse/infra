@@ -34,18 +34,3 @@ variable "storagebox_subaccounts" {
   }))
   default = {}
 }
-
-variable "owner_contact" {
-  description = "Domain owner contact details"
-  type = object({
-    legal_form     = string
-    firstname      = string
-    lastname       = string
-    email          = string
-    phone_number   = string
-    address_line_1 = string
-    zip            = string
-    city           = string
-    country        = string
-  })
-}
