@@ -34,6 +34,18 @@ output "tem_mimir_secret_key" {
   sensitive   = true
 }
 
+output "tem_nextcloud_access_key" {
+  description = "Access key for the tem-nextcloud IAM API key"
+  value       = module.iam_tem_nextcloud.access_key
+  sensitive   = true
+}
+
+output "tem_nextcloud_secret_key" {
+  description = "Secret key for the tem-nextcloud IAM API key"
+  value       = module.iam_tem_nextcloud.secret_key
+  sensitive   = true
+}
+
 output "tem_prowlarr_access_key" {
   description = "Access key for the tem-prowlarr IAM API key"
   value       = module.iam_tem_prowlarr.access_key
