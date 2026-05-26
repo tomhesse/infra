@@ -148,6 +148,14 @@ resource "scaleway_domain_record" "shrimphouse_xyz_mx_mail" {
   ttl      = 3600
 }
 
+resource "scaleway_domain_record" "shrimphouse_xyz_cname_cloud" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CNAME"
+  name     = "cloud"
+  data     = "nx99431.your-storageshare.de."
+  ttl      = 3600
+}
+
 resource "scaleway_domain_record" "shrimphouse_xyz_txt_mail_dmarc" {
   dns_zone = "shrimphouse.xyz"
   type     = "TXT"
