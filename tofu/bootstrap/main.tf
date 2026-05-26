@@ -34,5 +34,5 @@ resource "scaleway_iam_policy" "infra_opentofu" {
 
 resource "scaleway_iam_api_key" "infra_opentofu" {
   application_id = scaleway_iam_application.infra_opentofu.id
-  expires_at     = "2026-05-19T00:00:00Z"
+  expires_at     = "2027-05-19T00:00:00Z"
 }
