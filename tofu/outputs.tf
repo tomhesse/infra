@@ -1,3 +1,15 @@
+output "acme_homeassistant_access_key" {
+  description = "Access key for the acme-homeassistant IAM API key"
+  value       = module.iam_acme_homeassistant.access_key
+  sensitive   = true
+}
+
+output "acme_homeassistant_secret_key" {
+  description = "Secret key for the acme-homeassistant IAM API key"
+  value       = module.iam_acme_homeassistant.secret_key
+  sensitive   = true
+}
+
 output "acme_mimir_access_key" {
   description = "Access key for the acme-mimir IAM API key"
   value       = module.iam_acme_mimir.access_key

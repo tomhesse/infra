@@ -22,6 +22,14 @@ module "tem" {
   project_id = var.project_id
 }
 
+module "iam_acme_homeassistant" {
+  source               = "./modules/iam"
+  name                 = "acme-homeassistant"
+  project_ids          = [var.project_id]
+  permission_set_names = ["DomainsDNSFullAccess"]
+  expires_at           = "2027-05-02T00:00:00Z"
+}
+
 module "iam_acme_mimir" {
   source               = "./modules/iam"
   name                 = "acme-mimir"
