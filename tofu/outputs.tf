@@ -34,6 +34,18 @@ output "tem_alertmanager_secret_key" {
   sensitive   = true
 }
 
+output "tem_authelia_access_key" {
+  description = "Access key for the tem-authelia IAM API key"
+  value       = module.iam_tem_authelia.access_key
+  sensitive   = true
+}
+
+output "tem_authelia_secret_key" {
+  description = "Secret key for the tem-authelia IAM API key"
+  value       = module.iam_tem_authelia.secret_key
+  sensitive   = true
+}
+
 output "tem_homeassistant_access_key" {
   description = "Access key for the tem-homeassistant IAM API key"
   value       = module.iam_tem_homeassistant.access_key
