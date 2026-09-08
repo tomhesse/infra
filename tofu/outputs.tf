@@ -130,6 +130,18 @@ output "tem_sabnzbd_secret_key" {
   sensitive   = true
 }
 
+output "tem_seer_access_key" {
+  description = "Access key for the tem-seer IAM API key"
+  value       = module.iam_tem_seer.access_key
+  sensitive   = true
+}
+
+output "tem_seer_secret_key" {
+  description = "Secret key for the tem-seer IAM API key"
+  value       = module.iam_tem_seer.secret_key
+  sensitive   = true
+}
+
 output "tem_sonarr_access_key" {
   description = "Access key for the tem-sonarr IAM API key"
   value       = module.iam_tem_sonarr.access_key
