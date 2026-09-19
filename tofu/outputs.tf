@@ -70,6 +70,18 @@ output "tem_lldap_secret_key" {
   sensitive   = true
 }
 
+output "tem_loki_access_key" {
+  description = "Access key for the tem-loki IAM API key"
+  value       = module.iam_tem_loki.access_key
+  sensitive   = true
+}
+
+output "tem_loki_secret_key" {
+  description = "Secret key for the tem-loki IAM API key"
+  value       = module.iam_tem_loki.secret_key
+  sensitive   = true
+}
+
 output "tem_mimir_access_key" {
   description = "Access key for the tem-mimir IAM API key"
   value       = module.iam_tem_mimir.access_key
