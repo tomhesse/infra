@@ -166,6 +166,18 @@ output "tem_sonarr_secret_key" {
   sensitive   = true
 }
 
+output "tem_tyr_access_key" {
+  description = "Access key for the tem-tyr IAM API key"
+  value       = module.iam_tem_tyr.access_key
+  sensitive   = true
+}
+
+output "tem_tyr_secret_key" {
+  description = "Secret key for the tem-tyr IAM API key"
+  value       = module.iam_tem_tyr.secret_key
+  sensitive   = true
+}
+
 output "tem_smtp_host" {
   description = "SMTP host for sending emails"
   value       = module.tem.smtp_host
