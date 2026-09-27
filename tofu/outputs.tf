@@ -58,6 +58,18 @@ output "tem_homeassistant_secret_key" {
   sensitive   = true
 }
 
+output "tem_immich_access_key" {
+  description = "Access key for the tem-immich IAM API key"
+  value       = module.iam_tem_immich.access_key
+  sensitive   = true
+}
+
+output "tem_immich_secret_key" {
+  description = "Secret key for the tem-immich IAM API key"
+  value       = module.iam_tem_immich.secret_key
+  sensitive   = true
+}
+
 output "tem_lldap_access_key" {
   description = "Access key for the tem-lldap IAM API key"
   value       = module.iam_tem_lldap.access_key
