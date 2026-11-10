@@ -5,26 +5,34 @@ Homelab infrastructure as code, managed with [OpenTofu](https://opentofu.org/).
 ## Repo layout
 
 ```
-flake.nix           # Nix dev shell (OpenTofu, credentials)
-flake.lock          # Pinned Nix dependencies
+flake.nix              # Nix dev shell (OpenTofu, credentials)
+flake.lock             # Pinned Nix dependencies
 tofu/
-  backend.tf        # S3 backend configuration
-  providers.tf      # Scaleway provider configuration
-  main.tf           # Root module, calls dns and storage modules
-  variables.tf      # Root-level input variables
-  terraform.tfvars  # Variable values (gitignored, contains personal data)
+  backend.tf           # S3 backend configuration (Scaleway Object Storage)
+  providers.tf         # Provider configuration and version pins (Scaleway, Hetzner Cloud)
+  main.tf              # Root module: instantiates the modules below, declares the Hetzner SSH key
+  variables.tf         # Root-level input variables
+  outputs.tf           # Per-service API key credentials (all sensitive)
+  terraform.tfvars     # Variable values (gitignored, contains personal data)
+  .terraform.lock.hcl  # Provider dependency lock file (committed)
+  keys/
+    thesse.pub         # SSH public key, uploaded to Hetzner Cloud
   modules/
-    dns/            # Domain registrations and DNS records
-    storage/        # S3-compatible object storage (Scaleway Object Storage)
+    dns/               # Domain registration + DNS records (incl. TEM-derived mail records)
+    storage/           # Object storage bucket holding this repo's remote state
+    tem/               # Transactional Email domain (mail.shrimphouse.xyz)
+    iam/               # Generic factory: one IAM application + policy + API key
+    storagebox/        # Hetzner Storage Box and its per-service subaccounts
   bootstrap/
-    main.tf         # IAM application, policy, and API key
-    outputs.tf      # API key credentials (sensitive)
+    main.tf            # IAM application, policy, and API key
+    outputs.tf         # API key credentials (sensitive)
 ```
 
 ## Prerequisites
 
 - [Nix](https://nixos.org/) with flakes enabled
 - A Scaleway account with API keys
+- A Hetzner Cloud account with an API token
 
 ## Getting started
 
@@ -34,7 +42,10 @@ Enter the dev shell to get all required tools (OpenTofu, etc.) and set up creden
 nix develop
 ```
 
-This will prompt for your Scaleway Access Key and Secret Key, and export them for both the Scaleway provider and the S3 backend.
+This will prompt for your Scaleway Access Key and Secret Key and your Hetzner Cloud API token.
+The Scaleway keys are exported as `SCW_ACCESS_KEY` / `SCW_SECRET_KEY` and mirrored into
+`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`, since the S3 backend authenticates with the same
+credentials. The Hetzner token is exported as `HCLOUD_TOKEN` for the Hetzner Cloud provider.
 
 ## State
 
@@ -87,7 +98,7 @@ The domain registration and NS records already exist at Scaleway and must be imp
 
 ```sh
 cd tofu
-tofu import module.dns.scaleway_domain_registration.shrimphouse_xyz <project-id>/<task-id>
+tofu import module.dns.scaleway_domain_registration.shrimphouse_xyz shrimphouse.xyz
 tofu import module.dns.scaleway_domain_record.shrimphouse_xyz_ns_root_0 shrimphouse.xyz/<record-id>
 tofu import module.dns.scaleway_domain_record.shrimphouse_xyz_ns_root_1 shrimphouse.xyz/<record-id>
 ```
@@ -99,12 +110,23 @@ curl -s -H "X-Auth-Token: $SCW_SECRET_KEY" \
   "https://api.scaleway.com/domain/v2beta1/dns-zones/shrimphouse.xyz/records?type=NS"
 ```
 
-To find the domain registration task ID:
+The domain registration is imported by domain name. This requires Scaleway provider 2.84 or later;
+before that only `<project-id>/<task-id>` worked, and registration tasks are archived after a while,
+which can make that form unusable. On older providers the error message reads
+`expected 'projectID/domainName'` but the ID is in fact parsed as a task ID — the message is wrong.
+
+The registration resource needs `owner_contact_id` in `terraform.tfvars` — the ID of the existing
+Scaleway contact that owns the domain, readable from `tofu state show` after the import. Since
+OpenTofu evaluates variables before importing, pass it inline on the import command the first time:
 
 ```sh
-curl -s -H "X-Auth-Token: $SCW_SECRET_KEY" \
-  "https://api.scaleway.com/domain/v2beta1/tasks?domain=shrimphouse.xyz"
+tofu import -var 'owner_contact_id=<id>' \
+  module.dns.scaleway_domain_registration.shrimphouse_xyz shrimphouse.xyz
 ```
+
+The contact is referenced by ID rather than declared inline because the registrar API does not
+return contact fields on read, and changing a registrant requires a domain trade — the provider
+refuses the change and directs you to the Scaleway console.
 
 ### Key renewal
 

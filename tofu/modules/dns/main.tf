@@ -1,3 +1,15 @@
+resource "scaleway_domain_registration" "shrimphouse_xyz" {
+  domain_names = ["shrimphouse.xyz"]
+  auto_renew   = true
+  dnssec       = true
+
+  owner_contact_id = var.owner_contact_id
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 resource "scaleway_domain_record" "shrimphouse_xyz_ns_root_0" {
   dns_zone = "shrimphouse.xyz"
   type     = "NS"

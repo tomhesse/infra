@@ -10,3 +10,8 @@ variable "tem" {
     mx_priority  = number
   })
 }
+
+variable "owner_contact_id" {
+  description = "ID of the existing Scaleway contact that owns the domain"
+  type        = string
+}
