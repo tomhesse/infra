@@ -44,7 +44,7 @@ Child modules under `tofu/modules/` declare `required_providers` in their own `p
 
 Three edits, and all three must agree on the service name:
 
-1. A `module "iam_tem_<service>"` block in [tofu/main.tf](tofu/main.tf) (copy an existing one; keep `expires_at` consistent with its neighbors).
+1. A `module "iam_tem_<service>"` block in [tofu/main.tf](tofu/main.tf) (copy an existing one; `expires_at` comes from `local.iam_key_expires_at`, so leave that line alone).
 2. `tem_<service>_access_key` and `tem_<service>_secret_key` outputs in [tofu/outputs.tf](tofu/outputs.tf), both `sensitive = true`.
 3. Commit as `feat(iam): add TEM API key for <service>`.
 

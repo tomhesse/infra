@@ -1,3 +1,8 @@
+locals {
+  # All per-service IAM API keys share one expiry so they can be rotated together.
+  iam_key_expires_at = "2027-05-02T00:00:00Z"
+}
+
 module "storage" {
   source = "./modules/storage"
   region = var.region
@@ -29,7 +34,7 @@ module "iam_acme_homeassistant" {
   name                 = "acme-homeassistant"
   project_ids          = [var.project_id]
   permission_set_names = ["DomainsDNSFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_acme_mimir" {
@@ -37,7 +42,7 @@ module "iam_acme_mimir" {
   name                 = "acme-mimir"
   project_ids          = [var.project_id]
   permission_set_names = ["DomainsDNSFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 resource "hcloud_ssh_key" "thesse" {
@@ -60,7 +65,7 @@ module "iam_tem_alertmanager" {
   name                 = "tem-alertmanager"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_authelia" {
@@ -68,7 +73,7 @@ module "iam_tem_authelia" {
   name                 = "tem-authelia"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_homeassistant" {
@@ -76,7 +81,7 @@ module "iam_tem_homeassistant" {
   name                 = "tem-homeassistant"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_immich" {
@@ -84,7 +89,7 @@ module "iam_tem_immich" {
   name                 = "tem-immich"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_lldap" {
@@ -92,7 +97,7 @@ module "iam_tem_lldap" {
   name                 = "tem-lldap"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_loki" {
@@ -100,7 +105,7 @@ module "iam_tem_loki" {
   name                 = "tem-loki"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_mimir" {
@@ -108,7 +113,7 @@ module "iam_tem_mimir" {
   name                 = "tem-mimir"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_prowlarr" {
@@ -116,7 +121,7 @@ module "iam_tem_prowlarr" {
   name                 = "tem-prowlarr"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_radarr" {
@@ -124,7 +129,7 @@ module "iam_tem_radarr" {
   name                 = "tem-radarr"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_sabnzbd" {
@@ -132,7 +137,7 @@ module "iam_tem_sabnzbd" {
   name                 = "tem-sabnzbd"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_nextcloud" {
@@ -140,7 +145,7 @@ module "iam_tem_nextcloud" {
   name                 = "tem-nextcloud"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_seer" {
@@ -148,7 +153,7 @@ module "iam_tem_seer" {
   name                 = "tem-seer"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_sonarr" {
@@ -156,7 +161,7 @@ module "iam_tem_sonarr" {
   name                 = "tem-sonarr"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_tyr" {
@@ -164,5 +169,5 @@ module "iam_tem_tyr" {
   name                 = "tem-tyr"
   project_ids          = [var.project_id]
   permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = "2027-05-02T00:00:00Z"
+  expires_at           = local.iam_key_expires_at
 }
