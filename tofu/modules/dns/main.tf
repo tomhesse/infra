@@ -143,8 +143,8 @@ resource "scaleway_domain_record" "shrimphouse_xyz_mx_mail" {
   dns_zone = "shrimphouse.xyz"
   type     = "MX"
   name     = "mail"
-  data     = split(" ", var.tem.mx_config)[1]
-  priority = split(" ", var.tem.mx_config)[0]
+  data     = var.tem.mx_config
+  priority = var.tem.mx_priority
   ttl      = 3600
 }
 

@@ -7,5 +7,6 @@ variable "tem" {
     dmarc_config = string
     dmarc_name   = string
     mx_config    = string
+    mx_priority  = number
   })
 }

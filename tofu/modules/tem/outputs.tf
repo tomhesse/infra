@@ -24,8 +24,13 @@ output "dmarc_name" {
 }
 
 output "mx_config" {
-  description = "MX record value for TEM (priority and hostname)"
+  description = "MX exchange hostname for TEM (without priority)"
   value       = scaleway_tem_domain.this.mx_config
+}
+
+output "mx_priority" {
+  description = "MX priority for TEM"
+  value       = scaleway_tem_domain.this.mx_priority
 }
 
 output "smtp_host" {

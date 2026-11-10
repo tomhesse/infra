@@ -13,6 +13,7 @@ module "dns" {
     dmarc_config = module.tem.dmarc_config
     dmarc_name   = module.tem.dmarc_name
     mx_config    = module.tem.mx_config
+    mx_priority  = module.tem.mx_priority
   }
 }
 

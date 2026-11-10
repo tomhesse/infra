@@ -56,7 +56,7 @@ Permission sets in use: `DomainsDNSFullAccess` for ACME/DNS-01 keys, `Transactio
 
 The Transactional Email domain (`mail.shrimphouse.xyz`) is created with `autoconfig = false`, so its SPF/DKIM/DMARC/MX records are managed explicitly by the `dns` module instead of by Scaleway. The values flow `modules/tem` outputs → the `tem = { … }` object passed to the `dns` module in [tofu/main.tf](tofu/main.tf) → `var.tem.*` in [modules/dns/main.tf](tofu/modules/dns/main.tf). Adding a TEM-derived record means threading a new field through all three places.
 
-The MX record splits `mx_config` on a space to separate priority from hostname — the provider returns them as one string.
+The MX record uses `mx_config` (hostname) and `mx_priority` (number) as separate values. Before Scaleway provider 2.84, `mx_config` returned both joined by a space and had to be split; that form is gone.
 
 Note the root zone already carries mailbox.org mail records (SPF, MX, four DKIM CNAMEs, DMARC); TEM records live under the `mail` subdomain and must not clash with them.
 
