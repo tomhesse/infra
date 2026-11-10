@@ -47,6 +47,9 @@ The Scaleway keys are exported as `SCW_ACCESS_KEY` / `SCW_SECRET_KEY` and mirror
 `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`, since the S3 backend authenticates with the same
 credentials. The Hetzner token is exported as `HCLOUD_TOKEN` for the Hetzner Cloud provider.
 
+The two secrets are read without echo. Variables that are already set are left alone, so you can
+export them beforehand to skip the prompts or to use the shell non-interactively.
+
 ## State
 
 The root module stores state remotely in the `infra-tofu-state` S3 bucket on Scaleway (`nl-ams`). Running `tofu init` will configure the backend automatically.
