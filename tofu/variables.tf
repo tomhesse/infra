@@ -36,6 +36,6 @@ variable "storagebox_subaccounts" {
 }
 
 variable "owner_contact_id" {
-  description = "ID of the existing Scaleway contact that owns the domain"
+  description = "ID of the existing Scaleway contact that owns the registered domains"
   type        = string
 }

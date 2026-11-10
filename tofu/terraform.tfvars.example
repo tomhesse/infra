@@ -1,0 +1,37 @@
+# Copy to terraform.tfvars and fill in. The real file is gitignored.
+#
+# Required: organization_id, project_id, storagebox_password, owner_contact_id.
+# Optional: region, storagebox_subaccounts (shown with their defaults).
+
+# Scaleway organization and project. Both are visible in the Scaleway console
+# under IAM; project_id is also on the project's settings page.
+organization_id = "00000000-0000-0000-0000-000000000000"
+project_id      = "00000000-0000-0000-0000-000000000000"
+
+# Scaleway region. Must match the region of the state bucket in backend.tf.
+# region = "nl-ams"
+
+# Root password for the Hetzner Storage Box. Chosen by you, not issued by
+# Hetzner. Changing it here changes it on the Storage Box.
+storagebox_password = "CHANGE_ME"
+
+# ID of the existing Scaleway contact that owns the registered domains. Read it
+# from state rather than inventing one:
+#   tofu state show module.dns.scaleway_domain_registration.shrimphouse_xyz
+owner_contact_id = "CHANGE_ME"
+
+# Storage Box subaccounts, keyed by service name. Renaming a key destroys and
+# recreates that subaccount, so treat the keys as stable identifiers.
+# access_settings is optional and falls back to the Storage Box defaults.
+# storagebox_subaccounts = {
+#   someservice = {
+#     password       = "CHANGE_ME"
+#     home_directory = "/home/someservice"
+#     access_settings = {
+#       ssh_enabled          = true
+#       reachable_externally = false
+#       samba_enabled        = false
+#       webdav_enabled       = false
+#     }
+#   }
+# }

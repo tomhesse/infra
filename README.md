@@ -5,27 +5,28 @@ Homelab infrastructure as code, managed with [OpenTofu](https://opentofu.org/).
 ## Repo layout
 
 ```
-flake.nix              # Nix dev shell (OpenTofu, credentials)
-flake.lock             # Pinned Nix dependencies
+flake.nix                   # Nix dev shell (OpenTofu, credentials)
+flake.lock                  # Pinned Nix dependencies
 tofu/
-  backend.tf           # S3 backend configuration (Scaleway Object Storage)
-  providers.tf         # Provider configuration and version pins (Scaleway, Hetzner Cloud)
-  main.tf              # Root module: instantiates the modules below, declares the Hetzner SSH key
-  variables.tf         # Root-level input variables
-  outputs.tf           # Per-service API key credentials (all sensitive)
-  terraform.tfvars     # Variable values (gitignored, contains personal data)
-  .terraform.lock.hcl  # Provider dependency lock file (committed)
+  backend.tf                # S3 backend configuration (Scaleway Object Storage)
+  providers.tf              # Provider configuration and version pins (Scaleway, Hetzner Cloud)
+  main.tf                   # Root module: instantiates the modules below, declares the Hetzner SSH key
+  variables.tf              # Root-level input variables
+  outputs.tf                # Per-service API key credentials (all sensitive)
+  terraform.tfvars          # Variable values (gitignored, contains personal data)
+  terraform.tfvars.example  # Template for the above (committed)
+  .terraform.lock.hcl       # Provider dependency lock file (committed)
   keys/
-    thesse.pub         # SSH public key, uploaded to Hetzner Cloud
+    thesse.pub              # SSH public key, uploaded to Hetzner Cloud
   modules/
-    dns/               # Domain registrations + DNS records (incl. TEM-derived mail records)
-    storage/           # Object storage bucket holding this repo's remote state
-    tem/               # Transactional Email domain (mail.shrimphouse.xyz)
-    iam/               # Generic factory: one IAM application + policy + API key
-    storagebox/        # Hetzner Storage Box and its per-service subaccounts
+    dns/                    # Domain registrations + DNS records (incl. TEM-derived mail records)
+    storage/                # Object storage bucket holding this repo's remote state
+    tem/                    # Transactional Email domain (mail.shrimphouse.xyz)
+    iam/                    # Generic factory: one IAM application + policy + API key
+    storagebox/             # Hetzner Storage Box and its per-service subaccounts
   bootstrap/
-    main.tf            # IAM application, policy, and API key
-    outputs.tf         # API key credentials (sensitive)
+    main.tf                 # IAM application, policy, and API key
+    outputs.tf              # API key credentials (sensitive)
 ```
 
 ## Prerequisites
@@ -49,6 +50,15 @@ credentials. The Hetzner token is exported as `HCLOUD_TOKEN` for the Hetzner Clo
 
 The two secrets are read without echo. Variables that are already set are left alone, so you can
 export them beforehand to skip the prompts or to use the shell non-interactively.
+
+The root module also needs variable values. Copy the template and fill it in:
+
+```sh
+cp tofu/terraform.tfvars.example tofu/terraform.tfvars
+```
+
+`terraform.tfvars` is gitignored. `organization_id`, `project_id`, `storagebox_password` and
+`owner_contact_id` are required; the rest have defaults.
 
 ## State
 
@@ -149,6 +159,8 @@ tofu output -raw secret_key
 ```
 
 ## Usage
+
+Needs `tofu/terraform.tfvars` (see [Getting started](#getting-started)).
 
 ```sh
 cd tofu
