@@ -175,3 +175,15 @@ resource "scaleway_domain_record" "shrimphouse_xyz_txt_mail_dmarc" {
   data     = var.tem.dmarc_config
   ttl      = 3600
 }
+
+resource "scaleway_domain_registration" "tomhesse_xyz" {
+  domain_names = ["tomhesse.xyz"]
+  auto_renew   = true
+  dnssec       = false
+
+  owner_contact_id = var.owner_contact_id
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}

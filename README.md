@@ -18,7 +18,7 @@ tofu/
   keys/
     thesse.pub         # SSH public key, uploaded to Hetzner Cloud
   modules/
-    dns/               # Domain registration + DNS records (incl. TEM-derived mail records)
+    dns/               # Domain registrations + DNS records (incl. TEM-derived mail records)
     storage/           # Object storage bucket holding this repo's remote state
     tem/               # Transactional Email domain (mail.shrimphouse.xyz)
     iam/               # Generic factory: one IAM application + policy + API key
@@ -94,11 +94,12 @@ tofu init -migrate-state
 
 ### 3. Import existing DNS resources
 
-The domain registration and NS records already exist at Scaleway and must be imported into state:
+The domain registrations and NS records already exist at Scaleway and must be imported into state:
 
 ```sh
 cd tofu
 tofu import module.dns.scaleway_domain_registration.shrimphouse_xyz shrimphouse.xyz
+tofu import module.dns.scaleway_domain_registration.tomhesse_xyz tomhesse.xyz
 tofu import module.dns.scaleway_domain_record.shrimphouse_xyz_ns_root_0 shrimphouse.xyz/<record-id>
 tofu import module.dns.scaleway_domain_record.shrimphouse_xyz_ns_root_1 shrimphouse.xyz/<record-id>
 ```
