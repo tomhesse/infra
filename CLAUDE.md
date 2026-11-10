@@ -38,6 +38,11 @@ The chicken-and-egg ordering (bootstrap IAM → create state bucket with local s
 
 Child modules under `tofu/modules/` declare `required_providers` in their own `providers.tf` **without version constraints**; versions are pinned only in [tofu/providers.tf](tofu/providers.tf). No module takes an explicit `providers` block, so all of them inherit the root's default provider instances (including `organization_id`/`project_id`/`region`).
 
+The `dns` module has no `main.tf`; its resources are split one file per domain
+([shrimphouse_xyz.tf](tofu/modules/dns/shrimphouse_xyz.tf), [tomhesse_xyz.tf](tofu/modules/dns/tomhesse_xyz.tf)).
+Records are deliberately one explicit resource each, never a `for_each` over a records map — a map key
+rename would destroy and recreate live MX/SPF/DKIM records.
+
 `modules/iam` is a generic factory — one Scaleway IAM application + policy + API key per instantiation. The root module instantiates it once per consumer service, named `iam_<purpose>_<service>` (`iam_tem_immich`, `iam_acme_mimir`, …).
 
 ### Adding a per-service API key
@@ -54,7 +59,7 @@ Permission sets in use: `DomainsDNSFullAccess` for ACME/DNS-01 keys, `Transactio
 
 ## TEM ↔ DNS wiring
 
-The Transactional Email domain (`mail.shrimphouse.xyz`) is created with `autoconfig = false`, so its SPF/DKIM/DMARC/MX records are managed explicitly by the `dns` module instead of by Scaleway. The values flow `modules/tem` outputs → the `tem = { … }` object passed to the `dns` module in [tofu/main.tf](tofu/main.tf) → `var.tem.*` in [modules/dns/main.tf](tofu/modules/dns/main.tf). Adding a TEM-derived record means threading a new field through all three places.
+The Transactional Email domain (`mail.shrimphouse.xyz`) is created with `autoconfig = false`, so its SPF/DKIM/DMARC/MX records are managed explicitly by the `dns` module instead of by Scaleway. The values flow `modules/tem` outputs → the `tem = { … }` object passed to the `dns` module in [tofu/main.tf](tofu/main.tf) → `var.tem.*` in [modules/dns/shrimphouse_xyz.tf](tofu/modules/dns/shrimphouse_xyz.tf). Adding a TEM-derived record means threading a new field through all three places.
 
 The MX record uses `mx_config` (hostname) and `mx_priority` (number) as separate values. Before Scaleway provider 2.84, `mx_config` returned both joined by a space and had to be split; that form is gone.
 
