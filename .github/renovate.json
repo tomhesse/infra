@@ -22,11 +22,23 @@
       "semanticCommitScope": null
     },
     {
+      "matchManagers": ["nix"],
+      "schedule": ["before 6am on sunday"],
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "flake"
+    },
+    {
       "matchManagers": ["terraform"],
       "groupName": "the opentofu providers",
       "schedule": ["before 6am on sunday"],
       "semanticCommitType": "chore",
       "semanticCommitScope": "tofu"
+    },
+    {
+      "description": "Renovate computes .terraform.lock.hcl hashes itself instead of running tofu, which has produced broken locks. Regenerate it with `tofu init -upgrade` instead.",
+      "matchManagers": ["terraform"],
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "enabled": false
     }
   ],
   "semanticCommits": "enabled"
