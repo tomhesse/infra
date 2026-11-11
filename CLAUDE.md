@@ -71,6 +71,12 @@ That class of mistake is now impossible.
 
 Permission sets in use: `DomainsDNSFullAccess` for ACME/DNS-01 keys, `TransactionalEmailEmailFullAccess` for mail-sending keys.
 
+The `infra-opentofu` application itself holds `IAMApplicationManager` + `IAMPolicyManager` at
+organization scope — deliberately **not** `IAMManager`, which additionally bundles every
+`ProjectManager` permission and would let the key delete the project. Don't widen it back without a
+reason; if an apply fails on IAM permissions, the missing capability is probably narrower than
+`IAMManager`.
+
 ## TEM ↔ DNS wiring
 
 The Transactional Email domain (`mail.shrimphouse.xyz`) is created with `autoconfig = false`, so its SPF/DKIM/DMARC/MX records are managed explicitly by the `dns` module instead of by Scaleway. The values flow `modules/tem` outputs → the `tem = { … }` object passed to the `dns` module in [tofu/main.tf](tofu/main.tf) → `var.tem.*` in [modules/dns/shrimphouse_xyz.tf](tofu/modules/dns/shrimphouse_xyz.tf). Adding a TEM-derived record means threading a new field through all three places.

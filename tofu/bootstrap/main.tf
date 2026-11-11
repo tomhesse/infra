@@ -33,9 +33,14 @@ resource "scaleway_iam_policy" "infra_opentofu" {
     permission_set_names = ["DomainsDNSFullAccess", "ObjectStorageFullAccess", "TransactionalEmailFullAccess"]
   }
 
+  # Narrower than IAMManager, which also bundles every ProjectManager
+  # permission and so could delete the project this all lives in. These two
+  # cover exactly what the root module creates: applications (with their API
+  # keys) and policies. Organization scope is required because IAM resources
+  # are not project-scoped.
   rule {
     organization_id      = local.organization_id
-    permission_set_names = ["IAMManager"]
+    permission_set_names = ["IAMApplicationManager", "IAMPolicyManager"]
   }
 }
 
