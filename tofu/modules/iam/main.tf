@@ -15,4 +15,11 @@ resource "scaleway_iam_policy" "this" {
 resource "scaleway_iam_api_key" "this" {
   application_id = scaleway_iam_application.this.id
   expires_at     = var.expires_at
+
+  # expires_at is ForceNew, so changing it replaces the key. Create the
+  # replacement before destroying the old one so there is never a moment
+  # without a valid key.
+  lifecycle {
+    create_before_destroy = true
+  }
 }

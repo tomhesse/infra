@@ -42,4 +42,10 @@ resource "scaleway_iam_policy" "infra_opentofu" {
 resource "scaleway_iam_api_key" "infra_opentofu" {
   application_id = scaleway_iam_application.infra_opentofu.id
   expires_at     = "2027-05-19T00:00:00Z"
+
+  # Without this, renewal destroys this key before creating its replacement,
+  # which breaks the apply when it is run with this key's own credentials.
+  lifecycle {
+    create_before_destroy = true
+  }
 }

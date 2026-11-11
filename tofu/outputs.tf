@@ -10,30 +10,6 @@ output "acme_homeassistant_secret_key" {
   sensitive   = true
 }
 
-output "acme_mimir_access_key" {
-  description = "Access key for the acme-mimir IAM API key"
-  value       = module.iam_acme_mimir.access_key
-  sensitive   = true
-}
-
-output "acme_mimir_secret_key" {
-  description = "Secret key for the acme-mimir IAM API key"
-  value       = module.iam_acme_mimir.secret_key
-  sensitive   = true
-}
-
-output "tem_alertmanager_access_key" {
-  description = "Access key for the tem-alertmanager IAM API key"
-  value       = module.iam_tem_alertmanager.access_key
-  sensitive   = true
-}
-
-output "tem_alertmanager_secret_key" {
-  description = "Secret key for the tem-alertmanager IAM API key"
-  value       = module.iam_tem_alertmanager.secret_key
-  sensitive   = true
-}
-
 output "tem_authelia_access_key" {
   description = "Access key for the tem-authelia IAM API key"
   value       = module.iam_tem_authelia.access_key

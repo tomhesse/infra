@@ -37,14 +37,6 @@ module "iam_acme_homeassistant" {
   expires_at           = local.iam_key_expires_at
 }
 
-module "iam_acme_mimir" {
-  source               = "./modules/iam"
-  name                 = "acme-mimir"
-  project_ids          = [var.project_id]
-  permission_set_names = ["DomainsDNSFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
 resource "hcloud_ssh_key" "thesse" {
   name       = "thesse"
   public_key = file("${path.module}/keys/thesse.pub")
@@ -58,14 +50,6 @@ module "storagebox" {
   password         = var.storagebox_password
   ssh_keys         = [hcloud_ssh_key.thesse.public_key]
   subaccounts      = var.storagebox_subaccounts
-}
-
-module "iam_tem_alertmanager" {
-  source               = "./modules/iam"
-  name                 = "tem-alertmanager"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
 }
 
 module "iam_tem_authelia" {
