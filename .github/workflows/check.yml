@@ -1,0 +1,42 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.11.14
+
+      - name: Check formatting
+        run: tofu fmt -check -recursive -diff tofu
+
+      # -backend=false installs providers and local modules without reaching the
+      # state bucket, so no Scaleway credentials are needed.
+      - name: Validate the root module
+        working-directory: tofu
+        run: |
+          tofu init -backend=false -input=false
+          tofu validate
+
+      - name: Validate the bootstrap module
+        working-directory: tofu/bootstrap
+        run: |
+          tofu init -backend=false -input=false
+          tofu validate
