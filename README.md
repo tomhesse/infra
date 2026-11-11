@@ -51,6 +51,9 @@ credentials. The Hetzner token is exported as `HCLOUD_TOKEN` for the Hetzner Clo
 The two secrets are read without echo. Variables that are already set are left alone, so you can
 export them beforehand to skip the prompts or to use the shell non-interactively.
 
+Entering the shell also installs the pre-commit hooks, which format OpenTofu files, lint Nix, scan
+for secrets, and refuse to commit `terraform.tfvars` or a state file.
+
 The root module also needs variable values. Copy the template and fill it in:
 
 ```sh

@@ -27,6 +27,12 @@ tofu output -json iam_secret_keys | jq -r '.["tem-immich"]'   # read one service
 
 There is no test suite; `tofu fmt`, `tofu validate`, and `tofu plan` are the full feedback loop.
 
+Entering the dev shell installs pre-commit hooks (`cachix/git-hooks.nix`). They run `tofu fmt`, the
+Nix linters, `ripsecrets`/`detect-private-keys`, and a hook that refuses to commit
+`terraform.tfvars` or any `*.tfstate` — `.gitignore` alone is advisory, and those files hold
+passwords that no pattern-based scanner recognises. Commit messages are checked by `convco`.
+Run everything at once with `nix build .#checks.x86_64-linux.pre-commit`.
+
 ## Two separate root modules
 
 - `tofu/` — the main root module. Remote state in the `infra-tofu-state` Scaleway bucket (`nl-ams`), configured in [backend.tf](tofu/backend.tf). Runs with the `infra-opentofu` application credentials.
