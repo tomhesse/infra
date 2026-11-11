@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Berlin",
+  "assignees": ["tomhesse"],
+  "enabledManagers": ["nix", "terraform", "github-actions"],
+  "nix": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on sunday"],
+    "commitMessageAction": "update the flake inputs",
+    "semanticCommitScope": "flake"
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "the github actions",
+      "schedule": ["before 6am on sunday"],
+      "semanticCommitType": "ci",
+      "semanticCommitScope": null
+    },
+    {
+      "matchManagers": ["terraform"],
+      "groupName": "the opentofu providers",
+      "schedule": ["before 6am on sunday"],
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "tofu"
+    }
+  ],
+  "semanticCommits": "enabled"
+}
