@@ -40,7 +40,7 @@ The chicken-and-egg ordering (bootstrap IAM → create state bucket with local s
 
 ## Module conventions
 
-Child modules under `tofu/modules/` declare `required_providers` in their own `providers.tf` **without version constraints**; versions are pinned only in [tofu/providers.tf](tofu/providers.tf). No module takes an explicit `providers` block, so all of them inherit the root's default provider instances (including `organization_id`/`project_id`/`region`).
+Child modules under `tofu/modules/` declare `required_providers` in their own `providers.tf` **without version constraints**; versions are pinned only in [tofu/providers.tf](tofu/providers.tf). Those pins are **exact**, not ranges, so every provider bump arrives as a reviewable Renovate PR — a breaking change once slipped in through a `~> 2.0` range and was only caught at plan time. `tofu/bootstrap/` pins separately and has its own lock file; it currently trails the root module. No module takes an explicit `providers` block, so all of them inherit the root's default provider instances (including `organization_id`/`project_id`/`region`).
 
 The `dns` module has no `main.tf`; its resources are split one file per domain
 ([shrimphouse_xyz.tf](tofu/modules/dns/shrimphouse_xyz.tf), [tomhesse_xyz.tf](tofu/modules/dns/tomhesse_xyz.tf)).

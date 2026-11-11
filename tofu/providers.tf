@@ -4,11 +4,11 @@ terraform {
   required_providers {
     scaleway = {
       source  = "scaleway/scaleway"
-      version = "~> 2.0"
+      version = "2.91.0"
     }
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "~> 1.62"
+      version = "1.70.2"
     }
   }
 }
