@@ -1,6 +1,24 @@
 locals {
   # All per-service IAM API keys share one expiry so they can be rotated together.
   iam_key_expires_at = "2027-05-02T00:00:00Z"
+
+  # Per-service IAM API keys: application name => permission set.
+  iam_keys = {
+    "acme-homeassistant" = "DomainsDNSFullAccess"
+    "tem-authelia"       = "TransactionalEmailEmailFullAccess"
+    "tem-homeassistant"  = "TransactionalEmailEmailFullAccess"
+    "tem-immich"         = "TransactionalEmailEmailFullAccess"
+    "tem-lldap"          = "TransactionalEmailEmailFullAccess"
+    "tem-loki"           = "TransactionalEmailEmailFullAccess"
+    "tem-mimir"          = "TransactionalEmailEmailFullAccess"
+    "tem-nextcloud"      = "TransactionalEmailEmailFullAccess"
+    "tem-prowlarr"       = "TransactionalEmailEmailFullAccess"
+    "tem-radarr"         = "TransactionalEmailEmailFullAccess"
+    "tem-sabnzbd"        = "TransactionalEmailEmailFullAccess"
+    "tem-seer"           = "TransactionalEmailEmailFullAccess"
+    "tem-sonarr"         = "TransactionalEmailEmailFullAccess"
+    "tem-tyr"            = "TransactionalEmailEmailFullAccess"
+  }
 }
 
 module "storage" {
@@ -29,11 +47,13 @@ module "tem" {
   project_id = var.project_id
 }
 
-module "iam_acme_homeassistant" {
+module "iam" {
+  for_each = local.iam_keys
+
   source               = "./modules/iam"
-  name                 = "acme-homeassistant"
+  name                 = each.key
   project_ids          = [var.project_id]
-  permission_set_names = ["DomainsDNSFullAccess"]
+  permission_set_names = [each.value]
   expires_at           = local.iam_key_expires_at
 }
 
@@ -50,108 +70,4 @@ module "storagebox" {
   password         = var.storagebox_password
   ssh_keys         = [hcloud_ssh_key.thesse.public_key]
   subaccounts      = var.storagebox_subaccounts
-}
-
-module "iam_tem_authelia" {
-  source               = "./modules/iam"
-  name                 = "tem-authelia"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_homeassistant" {
-  source               = "./modules/iam"
-  name                 = "tem-homeassistant"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_immich" {
-  source               = "./modules/iam"
-  name                 = "tem-immich"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_lldap" {
-  source               = "./modules/iam"
-  name                 = "tem-lldap"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_loki" {
-  source               = "./modules/iam"
-  name                 = "tem-loki"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_mimir" {
-  source               = "./modules/iam"
-  name                 = "tem-mimir"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_prowlarr" {
-  source               = "./modules/iam"
-  name                 = "tem-prowlarr"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_radarr" {
-  source               = "./modules/iam"
-  name                 = "tem-radarr"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_sabnzbd" {
-  source               = "./modules/iam"
-  name                 = "tem-sabnzbd"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_nextcloud" {
-  source               = "./modules/iam"
-  name                 = "tem-nextcloud"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_seer" {
-  source               = "./modules/iam"
-  name                 = "tem-seer"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_sonarr" {
-  source               = "./modules/iam"
-  name                 = "tem-sonarr"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
-}
-
-module "iam_tem_tyr" {
-  source               = "./modules/iam"
-  name                 = "tem-tyr"
-  project_ids          = [var.project_id]
-  permission_set_names = ["TransactionalEmailEmailFullAccess"]
-  expires_at           = local.iam_key_expires_at
 }

@@ -22,7 +22,7 @@ tofu fmt -recursive       # formatting — run before committing
 tofu validate             # offline-ish syntax/type check
 tofu plan
 tofu apply
-tofu output -raw <name>   # read a sensitive output, e.g. tem_immich_secret_key
+tofu output -json iam_secret_keys | jq -r '.["tem-immich"]'   # read one service's secret
 ```
 
 There is no test suite; `tofu fmt`, `tofu validate`, and `tofu plan` are the full feedback loop.
@@ -47,17 +47,21 @@ The `dns` module has no `main.tf`; its resources are split one file per domain
 Records are deliberately one explicit resource each, never a `for_each` over a records map — a map key
 rename would destroy and recreate live MX/SPF/DKIM records.
 
-`modules/iam` is a generic factory — one Scaleway IAM application + policy + API key per instantiation. The root module instantiates it once per consumer service, named `iam_<purpose>_<service>` (`iam_tem_immich`, `iam_acme_mimir`, …).
+`modules/iam` is a generic factory — one Scaleway IAM application + policy + API key per instantiation. The root module instantiates it once with `for_each` over `local.iam_keys`, so instances are addressed as `module.iam["tem-immich"]`. Its API key sets `create_before_destroy`, because `expires_at` is `ForceNew` and a rotation would otherwise leave a moment with no valid key.
 
 ### Adding a per-service API key
 
-Three edits, and all three must agree on the service name:
+One edit: add an entry to `local.iam_keys` in [tofu/main.tf](tofu/main.tf), keyed by application name
+(`tem-<service>` or `acme-<service>`) with the permission set as the value. Outputs are derived, so
+there is nothing to add in [tofu/outputs.tf](tofu/outputs.tf). Commit as
+`feat(iam): add TEM API key for <service>`.
 
-1. A `module "iam_tem_<service>"` block in [tofu/main.tf](tofu/main.tf) (copy an existing one; `expires_at` comes from `local.iam_key_expires_at`, so leave that line alone).
-2. `tem_<service>_access_key` and `tem_<service>_secret_key` outputs in [tofu/outputs.tf](tofu/outputs.tf), both `sensitive = true`.
-3. Commit as `feat(iam): add TEM API key for <service>`.
+The map key becomes the `for_each` key, so **renaming a key destroys and recreates that application,
+policy, and API key** — the new credentials then have to be redistributed. Treat the keys as stable.
 
-Copy-paste in the outputs file has produced a real bug before (commit `0b6cb43`, "use correct module output for sabnzbd") — verify each new output references its own module.
+This used to be three edits that all had to agree, which produced a real bug (commit `0b6cb43`,
+"use correct module output for sabnzbd", where one service's outputs pointed at another's module).
+That class of mistake is now impossible.
 
 Permission sets in use: `DomainsDNSFullAccess` for ACME/DNS-01 keys, `TransactionalEmailEmailFullAccess` for mail-sending keys.
 
