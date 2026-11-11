@@ -9,8 +9,15 @@ terraform {
   required_version = ">= 1.6"
 }
 
-provider "scaleway" {
+locals {
   organization_id = "608deeb4-b226-44f7-bb38-4354d8029c7e"
+
+  # Scaleway's default project shares the organization's ID.
+  project_id = local.organization_id
+}
+
+provider "scaleway" {
+  organization_id = local.organization_id
 }
 
 resource "scaleway_iam_application" "infra_opentofu" {
@@ -22,12 +29,12 @@ resource "scaleway_iam_policy" "infra_opentofu" {
   application_id = scaleway_iam_application.infra_opentofu.id
 
   rule {
-    project_ids          = ["608deeb4-b226-44f7-bb38-4354d8029c7e"]
+    project_ids          = [local.project_id]
     permission_set_names = ["DomainsDNSFullAccess", "ObjectStorageFullAccess", "TransactionalEmailFullAccess"]
   }
 
   rule {
-    organization_id      = "608deeb4-b226-44f7-bb38-4354d8029c7e"
+    organization_id      = local.organization_id
     permission_set_names = ["IAMManager"]
   }
 }

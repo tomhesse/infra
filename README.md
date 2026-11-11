@@ -68,7 +68,7 @@ The bootstrap module uses local state, which is not committed to the repo.
 
 ## Bootstrapping
 
-Bootstrapping requires a **personal Scaleway API key** with organization-level permissions (IAM access). Run these steps once to set up the infrastructure that the root module depends on.
+Bootstrapping requires a **personal Scaleway API key** with organization-level permissions (IAM access), because nothing else exists yet. Run these steps once to set up the infrastructure that the root module depends on.
 
 ### 1. Bootstrap IAM (`tofu/bootstrap/`)
 
@@ -151,7 +151,12 @@ cd tofu/bootstrap
 tofu apply
 ```
 
-This will destroy the old key and create a new one. Retrieve the new credentials and update all environments using the old key:
+This will destroy the old key and create a new one. **Use a personal API key for this, not the
+`infra-opentofu` key itself.** The application does have the permissions (organization-scope
+`IAMManager`), but the replacement destroys before it creates, so renewing the key you are
+authenticating with leaves the create step with no valid credentials.
+
+Retrieve the new credentials and update all environments using the old key:
 
 ```sh
 tofu output -raw access_key

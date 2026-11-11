@@ -30,7 +30,11 @@ There is no test suite; `tofu fmt`, `tofu validate`, and `tofu plan` are the ful
 ## Two separate root modules
 
 - `tofu/` — the main root module. Remote state in the `infra-tofu-state` Scaleway bucket (`nl-ams`), configured in [backend.tf](tofu/backend.tf). Runs with the `infra-opentofu` application credentials.
-- `tofu/bootstrap/` — a standalone root module with **local state** (gitignored, so applying it is effectively one-shot). It creates the `infra-opentofu` IAM application, its policy, and its API key. Requires a *personal* Scaleway key with organization-level IAM permissions, and hardcodes the organization/project ID inline rather than using variables.
+- `tofu/bootstrap/` — a standalone root module with **local state** (gitignored, so applying it is effectively one-shot). It creates the `infra-opentofu` IAM application, its policy, and its API key. Apply it with a *personal* Scaleway key, not the `infra-opentofu` key. On the very first run nothing
+else exists yet; afterwards the reason is self-reference — `infra-opentofu` does hold organization-scope
+`IAMManager` and so has the permissions, but renewing its own key destroys the credential mid-apply and
+the follow-up create then has nothing to authenticate with. The module hardcodes the organization/project
+ID inline rather than using variables.
 
 The chicken-and-egg ordering (bootstrap IAM → create state bucket with local state → `tofu init -migrate-state`) and the DNS import commands are documented in [README.md](README.md). Don't re-derive them.
 
