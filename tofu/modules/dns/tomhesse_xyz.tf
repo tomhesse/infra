@@ -118,3 +118,24 @@ resource "scaleway_domain_record" "tomhesse_xyz_cname_openpgpkey" {
   data     = "wkd.keys.openpgp.org."
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_caa_root_issue" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CAA"
+  data     = "0 issue \"letsencrypt.org\""
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_caa_root_issuewild" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CAA"
+  data     = "0 issuewild \";\""
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_caa_root_iodef" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CAA"
+  data     = "0 iodef \"mailto:hostmaster@tomhesse.xyz\""
+  ttl      = 3600
+}
