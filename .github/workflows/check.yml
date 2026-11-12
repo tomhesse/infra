@@ -22,7 +22,7 @@ jobs:
 
       - uses: opentofu/setup-opentofu@v2
         with:
-          tofu_version: 1.11.14
+          tofu_version: v1.13.9
 
       - name: Check formatting
         run: tofu fmt -check -recursive -diff tofu
