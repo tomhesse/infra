@@ -41,3 +41,11 @@ resource "scaleway_domain_record" "tomhesse_xyz_mx_root_4" {
   priority = 10
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_txt_mailbox_verification" {
+  dns_zone = "tomhesse.xyz"
+  type     = "TXT"
+  name     = "84f18801657f421ae1e16d6e239f3f051a002364"
+  data     = "12639bdf6dcd898b2dc4bb2444ccba1a2ce47c1e"
+  ttl      = 3600
+}
