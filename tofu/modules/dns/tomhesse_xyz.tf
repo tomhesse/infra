@@ -63,3 +63,10 @@ resource "scaleway_domain_record" "tomhesse_xyz_txt_mailbox_verification" {
   data     = "12639bdf6dcd898b2dc4bb2444ccba1a2ce47c1e"
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_txt_root_spf" {
+  dns_zone = "tomhesse.xyz"
+  type     = "TXT"
+  data     = "v=spf1 include:mailbox.org ~all"
+  ttl      = 3600
+}
