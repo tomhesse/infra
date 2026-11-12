@@ -118,13 +118,19 @@ tofu import module.dns.scaleway_domain_registration.shrimphouse_xyz shrimphouse.
 tofu import module.dns.scaleway_domain_registration.tomhesse_xyz tomhesse.xyz
 tofu import module.dns.scaleway_domain_record.shrimphouse_xyz_ns_root_0 shrimphouse.xyz/<record-id>
 tofu import module.dns.scaleway_domain_record.shrimphouse_xyz_ns_root_1 shrimphouse.xyz/<record-id>
+tofu import module.dns.scaleway_domain_record.tomhesse_xyz_ns_root_0 tomhesse.xyz/<record-id>
+tofu import module.dns.scaleway_domain_record.tomhesse_xyz_ns_root_1 tomhesse.xyz/<record-id>
 ```
+
+Scaleway owns the apex NS record set of every zone it hosts and recreates it on delete, so these
+records are always imported, never created by OpenTofu. They are the zone's own NS set, not the
+registry delegation — changing who answers for a domain happens at the registrar.
 
 To find the NS record IDs:
 
 ```sh
 curl -s -H "X-Auth-Token: $SCW_SECRET_KEY" \
-  "https://api.scaleway.com/domain/v2beta1/dns-zones/shrimphouse.xyz/records?type=NS"
+  "https://api.scaleway.com/domain/v2beta1/dns-zones/<domain>/records?type=NS"
 ```
 
 The domain registration is imported by domain name. This requires Scaleway provider 2.84 or later;

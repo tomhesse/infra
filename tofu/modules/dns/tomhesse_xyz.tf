@@ -10,6 +10,20 @@ resource "scaleway_domain_registration" "tomhesse_xyz" {
   }
 }
 
+resource "scaleway_domain_record" "tomhesse_xyz_ns_root_0" {
+  dns_zone = "tomhesse.xyz"
+  type     = "NS"
+  data     = "ns0.dom.scw.cloud."
+  ttl      = 86400
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_ns_root_1" {
+  dns_zone = "tomhesse.xyz"
+  type     = "NS"
+  data     = "ns1.dom.scw.cloud."
+  ttl      = 86400
+}
+
 resource "scaleway_domain_record" "tomhesse_xyz_mx_root_1" {
   dns_zone = "tomhesse.xyz"
   type     = "MX"
