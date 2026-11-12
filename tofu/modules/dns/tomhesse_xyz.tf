@@ -102,3 +102,11 @@ resource "scaleway_domain_record" "tomhesse_xyz_cname_dkim_mbo0004" {
   data     = "mbo0004._domainkey.mailbox.org."
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_txt_dmarc" {
+  dns_zone = "tomhesse.xyz"
+  type     = "TXT"
+  name     = "_dmarc"
+  data     = "v=DMARC1;p=none;rua=mailto:postmaster@tomhesse.xyz"
+  ttl      = 3600
+}
