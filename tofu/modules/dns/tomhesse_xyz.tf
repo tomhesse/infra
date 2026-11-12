@@ -70,3 +70,35 @@ resource "scaleway_domain_record" "tomhesse_xyz_txt_root_spf" {
   data     = "v=spf1 include:mailbox.org ~all"
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_cname_dkim_mbo0001" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CNAME"
+  name     = "mbo0001._domainkey"
+  data     = "mbo0001._domainkey.mailbox.org."
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_cname_dkim_mbo0002" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CNAME"
+  name     = "mbo0002._domainkey"
+  data     = "mbo0002._domainkey.mailbox.org."
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_cname_dkim_mbo0003" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CNAME"
+  name     = "mbo0003._domainkey"
+  data     = "mbo0003._domainkey.mailbox.org."
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_cname_dkim_mbo0004" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CNAME"
+  name     = "mbo0004._domainkey"
+  data     = "mbo0004._domainkey.mailbox.org."
+  ttl      = 3600
+}
