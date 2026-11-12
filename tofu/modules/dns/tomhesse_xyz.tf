@@ -110,3 +110,11 @@ resource "scaleway_domain_record" "tomhesse_xyz_txt_dmarc" {
   data     = "v=DMARC1;p=none;rua=mailto:postmaster@tomhesse.xyz"
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_cname_openpgpkey" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CNAME"
+  name     = "openpgpkey"
+  data     = "wkd.keys.openpgp.org."
+  ttl      = 3600
+}
