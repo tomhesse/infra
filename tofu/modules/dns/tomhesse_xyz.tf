@@ -146,3 +146,67 @@ resource "scaleway_domain_record" "tomhesse_xyz_txt_root_google_verification" {
   data     = "google-site-verification=te4u3ZZMlXXGfA7U0IxdmDtdSUQ8qUO8G1__yCrMsh8"
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_a_root_0" {
+  dns_zone = "tomhesse.xyz"
+  type     = "A"
+  data     = "185.199.108.153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_a_root_1" {
+  dns_zone = "tomhesse.xyz"
+  type     = "A"
+  data     = "185.199.109.153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_a_root_2" {
+  dns_zone = "tomhesse.xyz"
+  type     = "A"
+  data     = "185.199.110.153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_a_root_3" {
+  dns_zone = "tomhesse.xyz"
+  type     = "A"
+  data     = "185.199.111.153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_aaaa_root_0" {
+  dns_zone = "tomhesse.xyz"
+  type     = "AAAA"
+  data     = "2606:50c0:8000::153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_aaaa_root_1" {
+  dns_zone = "tomhesse.xyz"
+  type     = "AAAA"
+  data     = "2606:50c0:8001::153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_aaaa_root_2" {
+  dns_zone = "tomhesse.xyz"
+  type     = "AAAA"
+  data     = "2606:50c0:8002::153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_aaaa_root_3" {
+  dns_zone = "tomhesse.xyz"
+  type     = "AAAA"
+  data     = "2606:50c0:8003::153"
+  ttl      = 3600
+}
+
+resource "scaleway_domain_record" "tomhesse_xyz_cname_www" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CNAME"
+  name     = "www"
+  data     = "tomhesse.github.io."
+  ttl      = 3600
+}
