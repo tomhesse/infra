@@ -139,3 +139,10 @@ resource "scaleway_domain_record" "tomhesse_xyz_caa_root_iodef" {
   data     = "0 iodef \"mailto:hostmaster@tomhesse.xyz\""
   ttl      = 3600
 }
+
+resource "scaleway_domain_record" "tomhesse_xyz_txt_root_google_verification" {
+  dns_zone = "tomhesse.xyz"
+  type     = "TXT"
+  data     = "google-site-verification=te4u3ZZMlXXGfA7U0IxdmDtdSUQ8qUO8G1__yCrMsh8"
+  ttl      = 3600
+}
