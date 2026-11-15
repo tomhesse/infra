@@ -53,14 +53,14 @@ The `dns` module has no `main.tf`; its resources are split one file per domain
 Records are deliberately one explicit resource each, never a `for_each` over a records map — a map key
 rename would destroy and recreate live MX/SPF/DKIM records.
 
-`modules/iam` is a generic factory — one Scaleway IAM application + policy + API key per instantiation. The root module instantiates it once with `for_each` over `local.iam_keys`, so instances are addressed as `module.iam["tem-immich"]`. Its API key sets `create_before_destroy`, because `expires_at` is `ForceNew` and a rotation would otherwise leave a moment with no valid key.
+`modules/iam` is a generic factory — one Scaleway IAM application + policy + API key per instantiation. The root module instantiates it once with `for_each` over `local.iam_keys`, so instances are addressed as `module.iam["tem-immich"]`. Each instance's `expires_at` comes from `local.iam_key_expiry` looked up by the key's group, not from one shared date — see [Key expiry groups](#key-expiry-groups). Its API key sets `create_before_destroy`, because `expires_at` is `ForceNew` and a rotation would otherwise leave a moment with no valid key.
 
 ### Adding a per-service API key
 
 One edit: add an entry to `local.iam_keys` in [tofu/main.tf](tofu/main.tf), keyed by application name
-(`tem-<service>` or `acme-<service>`) with the permission set as the value. Outputs are derived, so
-there is nothing to add in [tofu/outputs.tf](tofu/outputs.tf). Commit as
-`feat(iam): add TEM API key for <service>`.
+(`tem-<service>` or `acme-<service>`), with `{ permissions = <permission set>, group = <expiry group> }`
+as the value. Outputs are derived, so there is nothing to add in
+[tofu/outputs.tf](tofu/outputs.tf). Commit as `feat(iam): add TEM API key for <service>`.
 
 The map key becomes the `for_each` key, so **renaming a key destroys and recreates that application,
 policy, and API key** — the new credentials then have to be redistributed. Treat the keys as stable.
@@ -70,6 +70,27 @@ This used to be three edits that all had to agree, which produced a real bug (co
 That class of mistake is now impossible.
 
 Permission sets in use: `DomainsDNSFullAccess` for ACME/DNS-01 keys, `TransactionalEmailEmailFullAccess` for mail-sending keys.
+
+### Key expiry groups
+
+`local.iam_key_expiry` maps three groups — `acme`, `apps`, `hosts` — to three separate dates, and
+each entry in `local.iam_keys` names its group. `tem-loki`, `tem-mimir` and `tem-tyr` are machines;
+`tem-seer`, despite the name, is an application.
+
+The dates and their relative order are deliberate. **Do not consolidate them onto one date, reorder
+them, or rotate the groups together** — each of those choices is load-bearing, and the reasoning is
+kept outside this repo. Changing a date **is** a rotation: `expires_at` is `ForceNew`, so the key is
+replaced and its credentials have to be redistributed. Never restructure these dates as a tidy-up.
+
+Rotate one group at a time, and never earlier than a year before that group's own expiry —
+Scaleway's rolling org-wide cap rejects anything further out. See
+[README](README.md#the-organization-expiry-cap) for the earliest permissible date per group and
+[README](README.md#per-service-key-rotation) for the procedure. To rotate one key ad hoc (suspected
+leak) no config change is needed:
+
+```sh
+tofu apply -replace='module.iam["tem-immich"].scaleway_iam_api_key.this'
+```
 
 The `infra-opentofu` application itself holds `IAMApplicationManager` + `IAMPolicyManager` at
 organization scope — deliberately **not** `IAMManager`, which additionally bundles every

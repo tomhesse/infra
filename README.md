@@ -153,6 +153,9 @@ refuses the change and directs you to the Scaleway console.
 
 ### Key renewal
 
+This covers the `infra-opentofu` bootstrap key only. For the per-service keys, see
+[Per-service key rotation](#per-service-key-rotation).
+
 The API key has an expiration date set in `bootstrap/main.tf`. To renew, update the `expires_at` field and apply:
 
 ```sh
@@ -182,3 +185,76 @@ tofu init
 tofu plan
 tofu apply
 ```
+
+## Per-service key rotation
+
+The per-service IAM API keys expire in three groups — `acme`, `apps`, `hosts` — each with its own
+date in `local.iam_key_expiry` in [tofu/main.tf](tofu/main.tf). Rotate one group at a time.
+
+### The organization expiry cap
+
+Scaleway caps how far in the future `expires_at` may be set, org-wide. Exceeding it fails at apply
+time:
+
+```
+expires_at does not respect constraint, expiration date ... is too far in the future,
+organization security settings limit API key expiration to ...
+```
+
+The cap is rolling — creation time plus the configured maximum, currently one year — so a target
+date more than a year out is rejected until the rotation itself is close enough. Each group's date
+in `local.iam_key_expiry` is therefore **bumped at that group's rotation, not in advance**; a group
+still waiting its turn keeps its current date, so a plan between rotations stays empty.
+
+Current schedule:
+
+| Group   | Rotate on/after | Set expiry to |
+| ------- | --------------- | ------------- |
+| `acme`  | `2026-11-15`    | `2027-11-15`  |
+| `apps`  | `2026-12-27`    | `2027-12-27`  |
+| `hosts` | `2027-02-07`    | `2028-02-07`  |
+
+Rotating a group *earlier* than its date is what fails — the key would have to live longer than the
+cap allows. Later is always safe; the cap moves forward with creation time. The cap itself lives at
+Console → Organization → Security settings → Credential limitations → Set up API keys duration;
+changing it does not affect existing keys.
+
+`create_before_destroy` means a rejected date fails before anything is destroyed, so a botched date
+leaves the old keys intact and working.
+
+### Rotating a group
+
+Bump that group's date and apply:
+
+```sh
+cd tofu
+tofu plan      # expect only scaleway_iam_api_key replacements, no application/policy changes
+tofu apply
+```
+
+An application or policy showing up in the plan means a `local.iam_keys` map key changed — that
+destroys and recreates the identity, not just the credential. Fix the key spelling before applying.
+
+Then redistribute the new credentials:
+
+```sh
+tofu output -json iam_access_keys | jq -r 'to_entries[] | "\(.key)\t\(.value)"'
+tofu output -json iam_secret_keys | jq -r 'to_entries[] | "\(.key)\t\(.value)"'
+```
+
+For `tem-*` keys the secret key is the SMTP password; `tem_smtp_host`, `tem_smtps_port` and
+`tem_smtps_auth_user` are unchanged. For `acme-*` keys both the access and secret key are needed for
+DNS-01.
+
+`create_before_destroy` on the key resource prevents a gap in key *existence*, but not a gap in the
+validity of already-deployed config: the old secret stops working the moment the apply finishes, so
+redistribute in the same sitting. To narrow that window, target one group:
+
+```sh
+tofu apply -target='module.iam["tem-loki"]' \
+           -target='module.iam["tem-mimir"]' \
+           -target='module.iam["tem-tyr"]'
+```
+
+Afterwards, confirm delivery actually works — send a test mail from a rotated host — and finish with
+an untargeted `tofu apply`, which should be a no-op.
