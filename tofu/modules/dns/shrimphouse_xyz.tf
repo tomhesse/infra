@@ -54,6 +54,13 @@ resource "scaleway_domain_record" "shrimphouse_xyz_caa_root_issuewild" {
   ttl      = 3600
 }
 
+resource "scaleway_domain_record" "shrimphouse_xyz_caa_root_iodef" {
+  dns_zone = "shrimphouse.xyz"
+  type     = "CAA"
+  data     = "0 iodef \"mailto:hostmaster@shrimphouse.xyz\""
+  ttl      = 3600
+}
+
 resource "scaleway_domain_record" "shrimphouse_xyz_txt_root_spf" {
   dns_zone = "shrimphouse.xyz"
   type     = "TXT"
