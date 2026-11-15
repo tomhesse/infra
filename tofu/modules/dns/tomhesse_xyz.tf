@@ -211,6 +211,14 @@ resource "scaleway_domain_record" "tomhesse_xyz_cname_www" {
   ttl      = 3600
 }
 
+resource "scaleway_domain_record" "tomhesse_xyz_cname_start" {
+  dns_zone = "tomhesse.xyz"
+  type     = "CNAME"
+  name     = "start"
+  data     = "tomhesse.github.io."
+  ttl      = 3600
+}
+
 resource "scaleway_domain_record" "tomhesse_xyz_txt_github_pages_challenge" {
   dns_zone = "tomhesse.xyz"
   type     = "TXT"
