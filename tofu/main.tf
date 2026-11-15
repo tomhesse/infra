@@ -14,6 +14,7 @@ locals {
   # loki, mimir and tyr are machines; everything else is an application.
   iam_keys = {
     "acme-homeassistant" = { permissions = "DomainsDNSFullAccess", group = "acme" }
+    "acme-mimir"         = { permissions = "DomainsDNSFullAccess", group = "acme" }
     "tem-authelia"       = { permissions = "TransactionalEmailEmailFullAccess", group = "apps" }
     "tem-homeassistant"  = { permissions = "TransactionalEmailEmailFullAccess", group = "apps" }
     "tem-immich"         = { permissions = "TransactionalEmailEmailFullAccess", group = "apps" }
